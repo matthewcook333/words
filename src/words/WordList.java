@@ -13,6 +13,11 @@
  */
 package words;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -20,6 +25,8 @@ import java.util.List;
  *
  */
 public class WordList {
+	
+	private static HashSet<String> dict;
 	
 	/*
 	 * Constructor
@@ -30,8 +37,22 @@ public class WordList {
 	 * the_file into a java.util.Collection<String>. If an IOException
 	 * occurs, the stored Collection<String> is left empty. 
 	 */
-	public WordList(final String the_file) {
-		
+	public WordList(final String the_file) throws IOException {
+		dict = new HashSet<String>();
+		BufferedReader file = new BufferedReader(new FileReader(the_file));
+		try {	
+			String line = file.readLine();
+			while (line != null) {
+				dict.add(line);
+				line = file.readLine();
+			}
+		}
+		catch(IOException ioe) {
+			System.out.println(ioe.toString());
+		}
+		finally {
+			file.close();
+		}
 	}
 	
 	/*
