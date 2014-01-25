@@ -68,15 +68,19 @@ public class WordList {
 	public static int distance(final String word_1,
 			final String word_2,
 			final int the_threshold) {
-		// if we are comparing to the empty string, the distance
-		// is the other word length
+		// if we are comparing to the empty string, or if the threshold
+		// is zero, then return the max length word between the two
 		if (word_1.length() == 0 || word_2.length() == 0 ||
 				the_threshold == 0) {
 			return Math.max(word_1.length(), word_2.length());
 		}
+		// recurse to count edit operations (character deletions, additions,
+		// or changes
 		int deletion = 1 + distance(word_1.substring(1), word_2, the_threshold-1);
 		int addition = 1 + distance(word_1, word_2.substring(1), the_threshold-1);
 		int substitute;
+		// if the first characters are the same, we do not add anything to the
+		// distance and recurse
 		if (word_1.charAt(0) == word_2.charAt(0)) {
 			substitute = distance(word_1.substring(1), word_2.substring(1),
 					the_threshold);
@@ -84,6 +88,7 @@ public class WordList {
 			substitute = 1 + distance(word_1.substring(1), word_2.substring(1),
 					the_threshold-1);
 		}
+		// return the min distance of the possible edit operations
 		return Math.min(Math.min(deletion, addition), substitute);
 	}
 	
