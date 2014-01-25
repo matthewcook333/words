@@ -17,8 +17,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author Matt Cook
@@ -26,6 +30,7 @@ import java.util.List;
  */
 public class WordList {
 	
+	private static final int threshold = 1;
 	private static HashSet<String> dict;
 	
 	/*
@@ -71,7 +76,7 @@ public class WordList {
 		// if we are comparing to the empty string, or if the threshold
 		// is zero, then return the max length word between the two
 		if (word_1.length() == 0 || word_2.length() == 0 ||
-				the_threshold == 0) {
+				the_threshold < 0) {
 			return Math.max(word_1.length(), word_2.length());
 		}
 		// recurse to count edit operations (character deletions, additions,
@@ -117,7 +122,16 @@ public class WordList {
 	 *  are no suggested spellings, an empty list is returned.
 	 */
 	public List<String> suggestions(final String the_word) {
-		return null;
+		SortedSet<String> possible = new TreeSet<String>();
+		for (String word_2: dict) {
+			int dist = distance(the_word, word_2, threshold);
+			if (dist <= threshold) {
+				possible.add(word_2);
+			}
+		}
+		List<String> suggList = new ArrayList<String>();
+		suggList.addAll(possible);
+		return suggList;
 	}
 	
 
