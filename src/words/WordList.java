@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -146,11 +147,31 @@ public class WordList {
 	 * Details: Loads the word list, and allows the user to repeatedly type
 	 *  words (one per line) until the user inputs an EOF character.
 	 *  The output of correct() and suggestions() is printed to the console
-	 *  with each word the user enters.
+	 *  with each word the user enters. Throws IOException with incorrect 
+	 *  path to dictionary or bad dictionary file.
 	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public static void main(String[] args) throws IOException {
+		if (args.length == 0) {
+			System.out.println("Error: Please provide path to dictionary");
+			System.exit(0);
+		} 
+		WordList dictionary = new WordList(args[0]);
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			while (true) {
+				String word = input.readLine();
+				boolean correct = dictionary.correct(word);
+				System.out.println(correct);
+				List<String> suggestions = dictionary.suggestions(word);
+				for (int i = 0; i < suggestions.size(); ++i) {
+					System.out.println(suggestions.get(i));
+				}
+			}
+		} catch(IOException ioe) {
+			System.out.println(ioe.toString());
+		}
+		finally {
+			input.close();
+		}
 	}
-
 }
