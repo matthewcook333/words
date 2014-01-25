@@ -43,7 +43,7 @@ public class WordList {
 		try {	
 			String line = file.readLine();
 			while (line != null) {
-				dict.add(line);
+				dict.add(line.toLowerCase());
 				line = file.readLine();
 			}
 		}
@@ -68,10 +68,26 @@ public class WordList {
 	public static int distance(final String word_1,
 			final String word_2,
 			final int the_threshold) {
-		
-		return -1;
+		// if we are comparing to the empty string, the distance
+		// is the other word length
+		if (word_1.length() == 0 || word_2.length() == 0 ||
+				the_threshold == 0) {
+			return Math.max(word_1.length(), word_2.length());
+		}
+		int deletion = 1 + distance(word_1.substring(1), word_2, the_threshold-1);
+		int addition = 1 + distance(word_1, word_2.substring(1), the_threshold-1);
+		int substitute;
+		if (word_1.charAt(0) == word_2.charAt(0)) {
+			substitute = distance(word_1.substring(1), word_2.substring(1),
+					the_threshold);
+		} else {
+			substitute = 1 + distance(word_1.substring(1), word_2.substring(1),
+					the_threshold-1);
+		}
+		return Math.min(Math.min(deletion, addition), substitute);
 	}
 	
+
 	/*
 	 * Method: correct
 	 * 
@@ -81,6 +97,8 @@ public class WordList {
 	 *  and false otherwise.
 	 */
 	public boolean correct(final String the_word) {
+		if (dict.contains(the_word))
+			return true;
 		return false;
 	}
 	
