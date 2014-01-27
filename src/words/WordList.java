@@ -169,7 +169,7 @@ public class WordList {
 			}
 		} catch(IOException ioe) {
 			System.out.println(ioe.toString());
-		}
+		} 
 		finally {
 			input.close();
 		}
