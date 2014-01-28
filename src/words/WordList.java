@@ -47,9 +47,12 @@ public class WordList {
 		dict = new HashSet<String>();
 		BufferedReader file = new BufferedReader(new FileReader(the_file));
 		try {	
+			// read in the dictionary file line by line for each word
 			String line = file.readLine();
 			while (line != null) {
-				dict.add(line.toLowerCase());
+				if (line.length() > 0) {
+					dict.add(line.toLowerCase());
+				}
 				line = file.readLine();
 			}
 		}
@@ -98,7 +101,6 @@ public class WordList {
 		return Math.min(Math.min(deletion, addition), substitute);
 	}
 	
-
 	/*
 	 * Method: correct
 	 * 
@@ -124,9 +126,11 @@ public class WordList {
 	 */
 	public List<String> suggestions(final String the_word) {
 		SortedSet<String> possible = new TreeSet<String>();
+		// check each word in the dict
 		for (String word_2: dict) {
 			int dist = distance(the_word, word_2, threshold);
 			if (dist <= threshold) {
+				// if distance is within threshold, add the word
 				possible.add(word_2);
 			}
 		}
@@ -134,7 +138,6 @@ public class WordList {
 		suggList.addAll(possible);
 		return suggList;
 	}
-	
 
 	/**
 	 * Method: main
@@ -156,7 +159,8 @@ public class WordList {
 			System.exit(0);
 		} 
 		WordList dictionary = new WordList(args[0]);
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader input = new BufferedReader(
+			new InputStreamReader(System.in));
 		try {
 			while (true) {
 				String word = input.readLine();
